@@ -42,10 +42,13 @@ pipeline {
 
         stage('Send Email Notification') {
             steps {
-                mail to: "${EMAIL}",
-                     subject: "Jenkins Pipeline Notification - NestJS App Deployed",
-                     body: """The Jenkins pipeline has completed successfully and your NestJS app is deployed.
-                     Link: http://13.200.226.194:${PORT}/"""
+                emailext(
+                    to: "${EMAIL}",
+                    subject: "Jenkins Pipeline Notification - NestJS App Deployed",
+                    body: """The Jenkins pipeline has completed successfully and your NestJS app is deployed.
+                    Link: http://13.200.226.194:${PORT}/"""
+                )
+            
             }
         }
     }
