@@ -4,20 +4,22 @@ pipeline {
     environment {
         CONTAINER_NAME = 'nestjs-app'
         IMAGE_NAME = 'nestjs-image'
-        EMAIL = "anindasau@gmail.com"
-        PORT = "3000"
+        EMAIL = 'anindasau@gmail.com'
+        PORT = '3000'
     }
 
     stages {
+
         stage('Clean Repo') {
             steps {
-                git branch: 'main', url: 'https://github.com/ANINDASAU/CI-CD-Pipeline-with-Jenkins-Docker-AWS-EC2-GitHub-Webhook-Ubuntu.git'
+                git branch: 'main',
+                    url: 'https://github.com/ANINDASAU/CI-CD-Pipeline-with-Jenkins-Docker-AWS-EC2-GitHub-Webhook-Ubuntu.git'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t $IMAGE_NAME'
+                sh 'docker build -t $IMAGE_NAME .'
             }
         }
 
@@ -33,8 +35,7 @@ pipeline {
         stage('Docker Container Run') {
             steps {
                 sh '''
-                    docker run -d -p ${PORT}:${PORT}
-                    --name $CONTAINER_NAME $IMAGE_NAME
+                    docker run -d -p ${PORT}:${PORT} --name $CONTAINER_NAME $IMAGE_NAME
                 '''
             }
         }
@@ -42,9 +43,10 @@ pipeline {
         stage('Send Email Notification') {
             steps {
                 mail to: "${EMAIL}",
-                     subject: "Jenkins Pipeline Notification NestJS App Deployed",
-                     body: "The Jenkins pipeline has completed successfully and your NestJS app is deployed.
-                     Link: http://13.200.226.194:${PORT}/"
+                     subject: "Jenkins Pipeline Notification - NestJS App Deployed",
+                     body: """The Jenkins pipeline has completed successfully and your NestJS app is deployed.
+
+Link: http://13.200.226.194:${PORT}/"""
             }
         }
     }
